@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from PIL import Image
 from urllib.parse import urljoin
 from gemini import getAlt, getLabel
+from webColorss import ChangeColor
 
 class Scraper:
     def __init__(self):
@@ -21,7 +22,7 @@ class Scraper:
 
         self.get_imgs()
         self.get_label()
-        self.html = str(self.soup)
+        self.get_colors()
         return [self.url, self.soup, issues]
     
     def get_imgs(self):
@@ -65,12 +66,12 @@ class Scraper:
     def get_label(self):
         issue = []
 
-        for inp in self.soup.find_all('input, textarea'):
+        for inp in self.soup.find_all('input'):
+            # print(inp)
 
             if not inp.get('id'):
                 continue
             
-            print(inp)
 
             label = self.soup.find('label', attrs={'for': inp['id']})
             gemLabel = getLabel(inp, label)
@@ -82,6 +83,8 @@ class Scraper:
                 label['for'] = inp['id']
                 label.string = gemLabel
                 inp.insert_before(label)
+                br = self.soup.new_tag('br')
+                inp.insert_before(br)
             else:
                 label.string = gemLabel
             # issue.append({
@@ -92,6 +95,9 @@ class Scraper:
             # })
 
         return issue
+    
+    def get_colors(self):
+        ChangeColor(self.url, self.soup)
 
 
 if __name__ == "__main__":

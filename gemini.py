@@ -33,9 +33,9 @@ def getLabel(inp, label=""):
     except Exception:
         return ""
 
-def getColors(text_color, background_color):
+def getColors(style):
     try:
-        prompt = f"Provide a proper text color in CSS RGB format in square brackets (e.g., [rgb(r, g, b)]) to ensure clear separation from the background color for optimal readability: text color{text_color} background color{background_color}"
+        prompt = f"Given the inline style of an element in HTML, give a modified style with text color for the element based on background color, give answer inside square brackets: {style}"
         response = model.generate_content(prompt)
 
         return response.text.split('[')[1].split("]")[0]
