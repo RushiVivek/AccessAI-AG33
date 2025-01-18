@@ -8,11 +8,22 @@ def index():
     if request.method == "POST":
         url = request.form.get("website_link")
         analyzer = Scraper()
-        issues = analyzer.scrape_url(url)
+        html, issues = analyzer.scrape_url(url)
 
-        print(issues)
+        # print(issues)
 
-        return render_template("index.html", issues=issues)
+        for issue in issues:
+            if issue['type'] == 'altMissing':
+                html.replace(issue['element'], issue['fix'])
+            
+            if issue['type'] == 'labelMissing':
+                if issue['element']:
+                    html.replace(issue['element'], issue['fix'])
+                else:
+                    html.replace(issue['input'], f"{issue['input']} {issue['fix']}")
+                
+
+        return render_template("index.html", output=html)
 
     return render_template("index.html")
 

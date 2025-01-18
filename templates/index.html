@@ -56,12 +56,12 @@
 				<button class="btn btn-success" type="button">Compare Screenshots</button>
 			</div>
 		</div>
-		<div>
-			{% if issues %}
-			<h2>issues: </h2>
-			<pre>{{ issues }}</pre>
-			{% endif %}
-		</div>
+        <div>
+            {% if output %}
+                <h2>Output: </h2>
+                <iframe srcdoc="{{ output }}" width="100%" height="500px"></iframe>
+		    {% endif %}
+        </div>
 	</div>
 
 	<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
