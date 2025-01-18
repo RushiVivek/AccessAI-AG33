@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 from urllib.parse import urljoin
-from gemini import getAlt
+from gemini import getAlt, getLabel
 
 class Scraper:
     def __init__(self):
@@ -34,18 +34,52 @@ class Scraper:
 
                     #get alt text here
                     imgAlt = getAlt(img_src)
+                    
+                    simg = str(img)
+                    if "alt" in simg:
+                        simg = simg.split("alt")
+                        simg[1] = simg[1].split("=")[1]
+                        i = 0
+                        while simg[1][i] == " ":
+                            i += 1
+                        simg[1] = simg[1].split(simg[1][i])[2]
+                        simg = simg[0] + simg[1]
 
                     issue.append(
                         {
                             'type': 'altMissing',
                             'suggestion': imgAlt,
-                            'fix': f'<img src = {img.get('src')} alt = {imgAlt}>',
+                            'fix': f'{simg[:-2]} alt = "{imgAlt}">',
                             'element': str(img), 
                         } 
                     )
 
         return issue
             
+    def get_label(self, soup):
+        issue = []
+
+        for inp in soup.find_all('input, textarea'):
+
+            if not inp.get('id'):
+                continue
+            
+            print(inp)
+
+            label = soup.find('label', attrs={'for': inp['id']})
+            gemLabel = getLabel(inp, label)
+            if gemLabel == 'y':
+                continue
+            
+            issue.append({
+                'type': 'labelChanged',
+                'suggestion': gemLabel,
+                'fix': f'<label for="{inp["id"]}">{gemLabel}</label>',
+                'element': str(inp), 
+            })
+
+        return issue
+
 
 if __name__ == "__main__":
     sracpi = Scraper()
