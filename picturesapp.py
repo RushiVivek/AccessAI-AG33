@@ -19,10 +19,20 @@ def take_screenshot(url):
         with sync_playwright() as p:  
             browser = p.chromium.launch(headless=True)  
             page = browser.new_page(viewport={'width': 1280, 'height': 720})  
-            page.goto(url, wait_until='networkidle', timeout=15000)  
-            screenshot = page.screenshot(type='png', full_page=True)  
-            browser.close()  
-            return screenshot  
+            page.goto(url, wait_until='networkidle', timeout=15000)
+            page.wait_for_selector('iframe')  
+            screenshot = page.screenshot(type='png', full_page=True)
+            # Capture iframes  
+            iframes = page.frames  # Get all frames on the page  
+            print(iframes)
+            for index, frame in enumerate(iframes):  
+                if frame.url:  # Check if the iframe has a URL  
+                    frame_screenshot = frame.screenshot(type='png', full_page=True)  
+                    # Optionally save the screenshots of iframes  
+                    with open(os.path.join(SCREENSHOTS_FOLDER, f'iframe_screenshot_{index}.png'), 'wb') as f:  
+                        f.write(frame_screenshot)
+            browser.close()
+            return screenshot
     except Exception as e:  
         print(f"Screenshot error for {url}: {e}")  
         return None  

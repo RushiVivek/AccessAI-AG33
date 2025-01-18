@@ -2,10 +2,11 @@ from flask import Flask, render_template, request
 from webScraper import Scraper
 from urllib.parse import urljoin
 from bs4 import BeautifulSoup
+from picturesapp import take_screenshot, save_screenshot
 
 app = Flask(__name__, template_folder="templates")
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
         url = request.form.get("website_link")
@@ -48,6 +49,19 @@ def index():
 
         return render_template("index.html", output=html)
 
+    return render_template("index.html")
+
+@app.route("/compare", methods=["POST"])
+def cmp():
+    if request.method == "POST":
+        with concurrent.futures.ThreadPoolExecutor() as executor:  
+            original_screenshot = executor.submit(take_screenshot, "/")  
+            
+            original_screenshot = original_screenshot.result() 
+
+        # Save screenshots  
+        save_screenshot(original_screenshot, 'original_screenshot.png')
+        # take_screenshot("/")
     return render_template("index.html")
 
 if __name__ == "__main__":
