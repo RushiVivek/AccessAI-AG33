@@ -5,21 +5,22 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title></title>
-	<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"> -->
-	 <link rel="stylesheet" href="temp.css">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-	<div class="container display-flex justify-center align-center">
-		<nav><span>AccesAI</span>
+	<div class="container">
+		<nav><span>AccesAI</span> </nav>
 
-			<h1 class="h1 display-3"> Your heading</h1>
-			<h5 class=" h5"> enter the link of website below</h5>
+		<h1 class="display-3 text-center"> Your heading</h1>
+		<h5 class=" display-6 text-center"> enter the link of website below</h5>
+		<div class="form-ground">
 			<form action="#machine">
-				<label class = "" for="website_link">Link : </label>
+				<label class="" for="website_link">Link : </label>
 				<input type="url" name="website_link" id=" website_link" placeholder="Enter website url...">
-				<button class = "btn bg-success">Submit</button>
+				<button class="btn btn-success">Submit</button>
 			</form>
+		</div>
 
 	</div>
 	<script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
