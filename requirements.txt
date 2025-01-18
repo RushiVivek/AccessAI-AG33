@@ -10,3 +10,4 @@ requests
 Pillow
 wcag-contrast-ratio
 colorthief
+torch
