@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup  
 import re  
 import cssutils  
+from gemini import getColors
 
 def get_colors(url):  
     # Fetch the webpage  
@@ -90,33 +91,34 @@ def parse_css_colors(css_text):
     
     return color_info  
 
+def luminance(color):  
+    # Convert color to RGB  
+    if color.startswith('#'):  
+        color = color.lstrip('#')  
+        # Handle different length hex colors  
+        if len(color) == 3:  
+            color = ''.join([c*2 for c in color])  
+        r, g, b = int(color[:2], 16), int(color[2:4], 16), int(color[4:6], 16)  
+    elif color.startswith('rgb'):  
+        # Parse rgb() or rgba()  
+        nums = re.findall(r'\d+', color)  
+        r, g, b = map(int, nums[:3])  
+    else:  
+        # For named colors or unsupported formats  
+        return 0.5  
+    
+    # Standard RGB to luminance conversion
+    r = r / 255  
+    g = g / 255  
+    b = b / 255  
+    r = r / 12.92 if r <= 0.03928 else ((r + 0.055) / 1.055) ** 2.4  
+    g = g / 12.92 if g <= 0.03928 else ((g + 0.055) / 1.055) ** 2.4  
+    b = b / 12.92 if b <= 0.03928 else ((b + 0.055) / 1.055) ** 2.4  
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b  
+
 def check_contrast(text_color, background_color):  
     # Note: This is a placeholder. You'd need to implement actual contrast calculation  
     # Using a simple luminance-based contrast calculation  
-    def luminance(color):  
-        # Convert color to RGB  
-        if color.startswith('#'):  
-            color = color.lstrip('#')  
-            # Handle different length hex colors  
-            if len(color) == 3:  
-                color = ''.join([c*2 for c in color])  
-            r, g, b = int(color[:2], 16), int(color[2:4], 16), int(color[4:6], 16)  
-        elif color.startswith('rgb'):  
-            # Parse rgb() or rgba()  
-            nums = re.findall(r'\d+', color)  
-            r, g, b = map(int, nums[:3])  
-        else:  
-            # For named colors or unsupported formats  
-            return 0.5  
-        
-        # Standard RGB to luminance conversion
-        r = r / 255  
-        g = g / 255  
-        b = b / 255  
-        r = r / 12.92 if r <= 0.03928 else ((r + 0.055) / 1.055) ** 2.4  
-        g = g / 12.92 if g <= 0.03928 else ((g + 0.055) / 1.055) ** 2.4  
-        b = b / 12.92 if b <= 0.03928 else ((b + 0.055) / 1.055) ** 2.4  
-        return 0.2126 * r + 0.7152 * g + 0.0722 * b  
 
     try:  
         # Calculate relative luminance and contrast ratio  
@@ -128,8 +130,9 @@ def check_contrast(text_color, background_color):
         print(f"Contrast calculation error: {e}")  
         return 0  
 
-def main(url):  
-    # Get color information  
+def ChangeColor(url):  
+    # Get color information 
+    issues = []
     color_info = get_colors(url)  
     
     # Check contrast for each color pair  
@@ -145,10 +148,17 @@ def main(url):
             print(f"Contrast Ratio: {contrast}")  
             
             if contrast < 4.5:  
-                print("Poor color contrast detected!")  
-            print("---")  
+                changed_text_color = getColors(text_color, bg_color)
+                issues.append({
+                    info: info,
+                    text_color: changed_text_color, 
+                })
 
-# Example usage  
-if __name__ == "_main_":  
-    url = input("Enter website URL: ")  
-    main(url)
+    
+    return issues
+
+if "__name__" == "__main__":
+    url = "http://192.168.106.164:5000/"
+    issues = ChangeColor(url)
+
+    print(issues)
