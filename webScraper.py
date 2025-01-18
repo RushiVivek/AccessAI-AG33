@@ -39,7 +39,7 @@ class Scraper:
                         {
                             'type': 'altMissing',
                             'suggestion': imgAlt,
-                            'fix': f'<img src = {img.get('src')} alt = {imgAlt}>',
+                            'fix': f'<img src = "{str(img_src)}" alt = "{imgAlt}">',
                             'element': str(img), 
                         } 
                     )
