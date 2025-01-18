@@ -1,0 +1,81 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+    <meta charset="UTF-8">  
+    <title>Website Visual Comparison</title>  
+    <style>  
+        body {  
+            font-family: Arial, sans-serif;  
+            max-width: 1000px;  
+            margin: 0 auto;  
+            padding: 20px;  
+        }  
+        .form-group {  
+            margin-bottom: 15px;  
+        }  
+        input[type="text"] {  
+            width: 100%;  
+            padding: 10px;  
+        }  
+        .result {  
+            margin-top: 20px;  
+            padding: 15px;  
+            background-color: #f4f4f4;  
+        }  
+        .screenshot-container {  
+            display: flex;  
+            justify-content: space-between;  
+            margin-top: 20px;  
+        }  
+        .screenshot {  
+            width: 48%;  
+            border: 1px solid #ddd;  
+        }  
+        .screenshot img {  
+            max-width: 100%;  
+            height: auto;  
+        }  
+    </style>  
+</head>  
+<body>  
+    <h1>Website Visual Comparison Tool</h1>  
+    <form method="POST" enctype="multipart/form-data">  
+        <div class="form-group">  
+            <label>Original Website URL:</label>  
+            <input type="text" name="original_url" required>  
+        </div>  
+        <div class="form-group">  
+            <label>Modified Website URL:</label>  
+            <input type="text" name="modified_url" required>  
+        </div>  
+        <button type="submit">Compare Websites</button>  
+    </form>  
+
+    {% if error %}  
+    <div class="result error">  
+        <p>{{ error }}</p>  
+    </div>  
+    {% endif %}  
+
+    {% if result %}  
+    <div class="result">  
+        <h2>Comparison Results</h2>  
+        <p>{{ result }}</p>  
+        <p>Difference Percentage: {{ diff_percentage|round(2) }}%</p>  
+        <p>Original Website Score: {{ original_score|round(2) }}</p>  
+        <p>Modified Website Score: {{ modified_score|round(2) }}</p>  
+
+        <div class="screenshot-container">  
+            <div class="screenshot">  
+                <h3>Original Website</h3>  
+                <img src="{{ url_for('static', filename='original_screenshot.png') }}" alt="Original Website Screenshot">  
+            </div>  
+            <div class="screenshot">  
+                <h3>Modified Website</h3>  
+                <img src="{{ url_for('static', filename='modified_screenshot.png') }}" alt="Modified Website Screenshot">  
+            </div>  
+        </div>  
+    </div>  
+    {% endif %}  
+</body>  
+</html>
