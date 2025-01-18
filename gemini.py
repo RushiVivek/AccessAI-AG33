@@ -33,6 +33,16 @@ def getLabel(inp, label=""):
     except Exception:
         return ""
 
+def getColors(text_color, background_color):
+    try:
+        prompt = f"Provide a proper text color in CSS RGB format in square brackets (e.g., [rgb(r, g, b)]) to ensure clear separation from the background color for optimal readability: text color{text_color} background color{background_color}"
+        response = model.generate_content(prompt)
+
+        return response.text.split('[')[1].split("]")[0]
+
+    except Exception:
+        return text_color
+
 # html_input = {
 #     'type': 'text',
 #     'placeholder': 'Enter your name'
@@ -41,3 +51,4 @@ def getLabel(inp, label=""):
 
 # suggested_label = getLabel(html_input, existing_label)
 # print(suggested_label)
+
