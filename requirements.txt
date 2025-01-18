@@ -8,3 +8,4 @@ bs4
 requests
 Pillow
 google-generativeai
+cssutils

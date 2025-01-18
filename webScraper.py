@@ -35,14 +35,16 @@ class Scraper:
                     #get alt text here
                     imgAlt = getAlt(img_src)
                     
+                    #removing empty alt
                     simg = str(img)
                     if "alt" in simg:
                         simg = simg.split("alt")
-                        simg[1] = simg[1].split("=")[1]
+                        simg[1] = "=".join(simg[1].split("=")[1:])
                         i = 0
                         while simg[1][i] == " ":
                             i += 1
-                        simg[1] = simg[1].split(simg[1][i])[2]
+                        ch = simg[1][i]
+                        simg[1] = ch.join(simg[1].split(ch)[2:])
                         simg = simg[0] + simg[1]
 
                     issue.append(
