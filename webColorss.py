@@ -4,19 +4,16 @@ import re
 import cssutils  
 from gemini import getColors
 
-def get_colors(url):  
-    # Fetch the webpage  
-    response = requests.get(url)  
-    soup = BeautifulSoup(response.text, 'html.parser')  
-    
+# Function to parse color from different formats  
+def parse_color(color_str):  
+    # Remove quotes and whitespace  
+    color_str = color_str.strip().strip("'\"")  
+    return color_str  
+
+def get_colors(url, soup):  
     # Store color information  
     color_info = []  
     
-    # Function to parse color from different formats  
-    def parse_color(color_str):  
-        # Remove quotes and whitespace  
-        color_str = color_str.strip().strip("'\"")  
-        return color_str  
 
     # 1. Check inline styles  
     for element in soup.find_all(style=True):  
@@ -25,37 +22,45 @@ def get_colors(url):
         bg_color_match = re.search(r'background-color:\s*([^;]+)', inline_style)  
         
         if text_color_match or bg_color_match:  
-            color_info.append({  
-                'element': element.name,  
-                'text_color': parse_color(text_color_match.group(1)) if text_color_match else None,  
-                'bg_color': parse_color(bg_color_match.group(1)) if bg_color_match else None  
-            })  
+            # print(element)
+            changed_style = getColors(element['style'])
+            element['style'] = changed_style
+            # spl = element['style'].split("color:")
+            # spl = ";".join(spl[1].split(";")[1:])
+            # element['style'] = "".join(spl)
+            # element['style'] += f'color: {changed_text_color};'
+            # color_info.append({  
+            #     'type': 1,
+            #     'element': element,  
+            #     'text_color': parse_color(text_color_match.group(1)) if text_color_match else None,  
+            #     'bg_color': parse_color(bg_color_match.group(1)) if bg_color_match else None  
+            # })
     
 
 
     # 2. Extract colors from CSS stylesheets  
-    style_tags = soup.find_all('style')  
-    link_tags = soup.find_all('link', rel='stylesheet')  
+    # style_tags = soup.find_all('style')  
+    # link_tags = soup.find_all('link', rel='stylesheet')  
     
-    # Parse CSS from style tags  
-    for style_tag in style_tags:  
-        css = style_tag.string  
-        if css:  
-            color_info.extend(parse_css_colors(css))  
+    # # Parse CSS from style tags  
+    # for style_tag in style_tags:  
+    #     css = style_tag.string  
+    #     if css:  
+    #         color_info.extend(parse_css_colors(css))  
     
-    # Fetch and parse external stylesheets  
-    for link in link_tags:  
-        href = link.get('href')  
-        if href:  
-            # Handle relative URLs  
-            if not href.startswith(('http://', 'https://')):  
-                href = requests.compat.urljoin(url, href)  
+    # # Fetch and parse external stylesheets  
+    # for link in link_tags:  
+    #     href = link.get('href')  
+    #     if href:  
+    #         # Handle relative URLs  
+    #         if not href.startswith(('http://', 'https://')):  
+    #             href = requests.compat.urljoin(url, href)  
             
-            try:  
-                css_response = requests.get(href)  
-                color_info.extend(parse_css_colors(css_response.text))  
-            except Exception as e:  
-                print(f"Error fetching stylesheet {href}: {e}")  
+    #         try:  
+    #             css_response = requests.get(href)  
+    #             color_info.extend(parse_css_colors(css_response.text))  
+    #         except Exception as e:  
+    #             print(f"Error fetching stylesheet {href}: {e}")  
     
     return color_info  
 
@@ -82,6 +87,7 @@ def parse_css_colors(css_text):
                 # If colors found, add to color info  
                 if text_color or bg_color:  
                     color_info.append({  
+                        'type': 2,
                         'selector': rule.selectorText,  
                         'text_color': text_color,  
                         'bg_color': bg_color  
@@ -130,29 +136,33 @@ def check_contrast(text_color, background_color):
         print(f"Contrast calculation error: {e}")  
         return 0  
 
-def ChangeColor(url):  
+def ChangeColor(url, soup):  
     # Get color information 
     issues = []
-    color_info = get_colors(url)  
+    color_info = get_colors(url, soup)  
     
     # Check contrast for each color pair  
-    for info in color_info:  
-        text_color = info.get('text_color')  
-        bg_color = info.get('bg_color')  
+    # for info in color_info:  
+    #     text_color = info.get('text_color')  
+    #     bg_color = info.get('bg_color')  
         
-        if text_color and bg_color:  
-            contrast = check_contrast(text_color, bg_color)  
-            print(f"Selector/Element: {info.get('selector', info.get('element', 'Unknown'))}")  
-            print(f"Text Color: {text_color}")  
-            print(f"Background Color: {bg_color}")  
-            print(f"Contrast Ratio: {contrast}")  
+    #     if text_color and bg_color:  
+    #         contrast = check_contrast(text_color, bg_color)  
+            # print(f"Selector/Element: {info.get('selector', info.get('element', 'Unknown'))}")  
+            # print(f"Text Color: {text_color}")  
+            # print(f"Background Color: {bg_color}")  
+            # print(f"Contrast Ratio: {contrast}")  
             
-            if contrast < 4.5:  
-                changed_text_color = getColors(text_color, bg_color)
-                issues.append({
-                    info: info,
-                    text_color: changed_text_color, 
-                })
+            # if contrast < 4.5:  
+            #     changed_text_color = getColors(text_color, bg_color)
+            #     if info['type'] == 1:
+            #         info['element']['style'] += f'color: {changed_text_color};'
+            #         info['element']['style'] = info['element']['style'].replace(f'color: {text_color};', f'color: {changed_text_color};')
+                    
+                # issues.append({
+                #     info: info,
+                #     text_color: changed_text_color, 
+                # })
 
     
     return issues
