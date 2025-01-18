@@ -7,24 +7,28 @@ from gemini import getAlt, getLabel
 class Scraper:
     def __init__(self):
         self.url = ""
+        self.html = ""
+        self.soup = None
 
     def scrape_url(self, url):
 
         issues = []
 
         req = requests.get(url)
-        soup = BeautifulSoup(req.text, 'html.parser')
+        self.soup = BeautifulSoup(req.text, 'html.parser')
         self.url = req.url
+        self.html = req.text
 
-        issues.extend(self.get_imgs(soup))
-        issues.extend(self.get_label(soup))
-        return [req.text, issues]
+        self.get_imgs()
+        self.get_label()
+        self.html = str(self.soup)
+        return [self.url, self.soup, issues]
     
-    def get_imgs(self, soup):
+    def get_imgs(self):
         issue = []
 
-        for img in soup.find_all('img'):
-            if not img.get('alt'):
+        for img in self.soup.find_all('img'):
+            if not img.get('alt') or img.get('alt') == '':
                 img_src = img.get('src')
 
                 if img_src:
@@ -47,37 +51,45 @@ class Scraper:
                         simg[1] = ch.join(simg[1].split(ch)[2:])
                         simg = simg[0] + simg[1]
 
-                    issue.append(
-                        {
-                            'type': 'altMissing',
-                            'fix': f'{simg[:-2]} alt = "{imgAlt}"/>',
-                            'element': str(img), 
-                        } 
-                    )
+                    img['alt'] = imgAlt
+                    # issue.append(
+                    #     {
+                    #         'type': 'altMissing',
+                    #         'fix': f'{simg[:-2]} alt = "{imgAlt}"/>',
+                    #         'element': str(img), 
+                    #     } 
+                    # )
 
         return issue
             
-    def get_label(self, soup):
+    def get_label(self):
         issue = []
 
-        for inp in soup.find_all('input, textarea'):
+        for inp in self.soup.find_all('input, textarea'):
 
             if not inp.get('id'):
                 continue
             
             print(inp)
 
-            label = soup.find('label', attrs={'for': inp['id']})
+            label = self.soup.find('label', attrs={'for': inp['id']})
             gemLabel = getLabel(inp, label)
             if gemLabel == 'y':
                 continue
             
-            issue.append({
-                'type': 'labelChanged',
-                'fix': f'<label for="{inp["id"]}">{gemLabel}</label>',
-                'element': str(label) if label else None,
-                'input': str(inp),
-            })
+            if not label:
+                label = self.soup.new_tag('label')
+                label['for'] = inp['id']
+                label.string = gemLabel
+                inp.insert_before(label)
+            else:
+                label.string = gemLabel
+            # issue.append({
+            #     'type': 'labelChanged',
+            #     'fix': f'<label for="{inp["id"]}">{gemLabel}</label>',
+            #     'element': str(label) if label else None,
+            #     'input': str(inp),
+            # })
 
         return issue
 
