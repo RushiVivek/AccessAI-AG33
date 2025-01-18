@@ -2,3 +2,11 @@
 opencv-python
 selenium
 flask
+selenium
+transformers
+numpy
+bs4
+requests
+Pillow
+wcag-contrast-ratio
+colorthief
