@@ -93,3 +93,10 @@ table {
     padding-left: 50px;
     padding-top: 30px;
   }
+
+  .out{
+    border : 2px solid black;
+    border-radius: 10px;
+    margin: 1em auto;
+    padding: 1em;
+  }
