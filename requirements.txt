@@ -2,4 +2,3 @@
 opencv-python
 selenium
 flask
-cv2
