@@ -51,7 +51,7 @@ class Scraper:
                         {
                             'type': 'altMissing',
                             'suggestion': imgAlt,
-                            'fix': f'{simg[:-2]} alt = "{imgAlt}">',
+                            'fix': f'{simg[:-2]} alt = "{imgAlt}"/>',
                             'element': str(img), 
                         } 
                     )
