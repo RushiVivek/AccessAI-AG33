@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from sudoku_solver import solve_sudoku
 
 app = Flask(__name__, template_folder="templates")
 
