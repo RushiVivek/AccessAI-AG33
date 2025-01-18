@@ -7,7 +7,6 @@ from gemini import getAlt, getLabel
 class Scraper:
     def __init__(self):
         self.url = ""
-        pass
 
     def scrape_url(self, url):
 
@@ -18,7 +17,8 @@ class Scraper:
         self.url = req.url
 
         issues.extend(self.get_imgs(soup))
-        return issues
+        issues.extend(self.get_label(soup))
+        return [req.text, issues]
     
     def get_imgs(self, soup):
         issue = []
@@ -50,7 +50,6 @@ class Scraper:
                     issue.append(
                         {
                             'type': 'altMissing',
-                            'suggestion': imgAlt,
                             'fix': f'{simg[:-2]} alt = "{imgAlt}"/>',
                             'element': str(img), 
                         } 
@@ -75,9 +74,9 @@ class Scraper:
             
             issue.append({
                 'type': 'labelChanged',
-                'suggestion': gemLabel,
                 'fix': f'<label for="{inp["id"]}">{gemLabel}</label>',
-                'element': str(inp), 
+                'element': str(label) if label else None,
+                'input': str(inp),
             })
 
         return issue
