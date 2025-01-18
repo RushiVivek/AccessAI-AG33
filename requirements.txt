@@ -9,3 +9,5 @@ requests
 Pillow
 google-generativeai
 cssutils
+playwright
+playwright.sync_api
