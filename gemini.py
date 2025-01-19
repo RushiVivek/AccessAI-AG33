@@ -40,8 +40,8 @@ def getColors(style):
 
         return response.text.split('[')[1].split("]")[0]
 
-    except Exception:
-        return text_color
+    except Exception as e:
+        print(e)
 
 # html_input = {
 #     'type': 'text',
