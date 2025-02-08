@@ -1,4 +1,4 @@
-# 🌐 AccessAI-AG33
+# 🌐 [AccessAI-AG33](https://accessai-r6or.onrender.com)
 
 Enhancing web accessibility with AI-driven solutions! 🚀
 
@@ -86,16 +86,12 @@ For any questions, feedback, or suggestions, feel free to reach out:
 Here's a glimpse of what **AccessAI-AG33** can do:
 
 1. **Improved Alt Text for Images**  
-   ![Alt Text Example](https://via.placeholder.com/600x300?text=Alt+Text+Improved)
+   ![](https://i.postimg.cc/k24dpYFK/Screenshot-2025-02-08-194446.png) ![](https://i.postimg.cc/kR90FTgV/Screenshot-2025-02-08-194751.png)
 
 2. **Proper Labels for Inputs**  
-   ![Label Example](https://via.placeholder.com/600x300?text=Labels+Improved)
+   ![](https://i.postimg.cc/z32mRF1f/Screenshot-2025-02-08-194857.png) ![](https://i.postimg.cc/9rD6PwWY/Screenshot-2025-02-08-195010.png)
 
 3. **Color Contrast Enhancements**  
-   ![Contrast Example](https://via.placeholder.com/600x300?text=Better+Contrast)
+   ![](https://i.postimg.cc/XXYSJDmh/Screenshot-2025-02-08-195044.png) ![](https://i.postimg.cc/GH6ZX3tw/Screenshot-2025-02-08-195105.png)
 
 🎉 **Thank you for using AccessAI-AG33! Together, we can make the web a more inclusive place.**
-
-### Suggestions:
-**a.** Add a real demo or deployment link for users to test the tool online.  
-**b.** Include detailed API documentation for developers integrating it into other platforms.
