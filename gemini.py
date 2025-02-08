@@ -1,8 +1,8 @@
 import google.generativeai as genai
 import PIL.Image
-import requests, io
+import requests, io, os
 
-genai.configure(api_key=process.env.GEMAPI)
+genai.configure(api_key=os.getenv("GEMAPI"))
 model = genai.GenerativeModel("gemini-1.5-flash")
 
 def getAlt(src):
