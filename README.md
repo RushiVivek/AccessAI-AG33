@@ -86,12 +86,12 @@ For any questions, feedback, or suggestions, feel free to reach out:
 Here's a glimpse of what **AccessAI-AG33** can do:
 
 1. **Improved Alt Text for Images**  
-   ![](https://i.postimg.cc/k24dpYFK/Screenshot-2025-02-08-194446.png) ![](https://i.postimg.cc/kR90FTgV/Screenshot-2025-02-08-194751.png)
+   <img src="/DemoImages/AltBefore.png?raw=true" width=400px><img src="/DemoImages/AltAfter.png?raw=true" width=400px>
 
 2. **Proper Labels for Inputs**  
-   ![](https://i.postimg.cc/z32mRF1f/Screenshot-2025-02-08-194857.png) ![](https://i.postimg.cc/9rD6PwWY/Screenshot-2025-02-08-195010.png)
+   <img src="/DemoImages/LabelBefore.png?raw=true" width=400px><img src="/DemoImages/LabelAfter.png?raw=true" width=400px>
 
 3. **Color Contrast Enhancements**  
-   ![](https://i.postimg.cc/XXYSJDmh/Screenshot-2025-02-08-195044.png) ![](https://i.postimg.cc/GH6ZX3tw/Screenshot-2025-02-08-195105.png)
+   <img src="/DemoImages/ContrastBefore.png?raw=true" width=400px><img src="/DemoImages/ContrastAfter.png?raw=true" width=400px>
 
 🎉 **Thank you for using AccessAI-AG33! Together, we can make the web a more inclusive place.**
