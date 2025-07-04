@@ -11,3 +11,4 @@ google-generativeai
 cssutils
 playwright
 numpy
+chromium
